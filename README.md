@@ -39,13 +39,5 @@ Game of War is a web-based card game project that simulates the classic card gam
 - Allow users to play against an AI opponent.
 - Make the game responsive for mobile devices.
 - Enhance API integration for additional game features.
-
-## Contributing
-Feel free to contribute to this project by submitting issues or pull requests. Any contributions to enhance the game are welcome!
-
-## License
-This project is open-source and available under the [MIT License](LICENSE).
-
----
-
+  
 Enjoy the game and have fun!
