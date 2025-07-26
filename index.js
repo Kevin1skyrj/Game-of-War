@@ -20,13 +20,17 @@ const playerNameInput = document.getElementById("player-name");
 const scoreAnimation = document.getElementById("score-animation");
 const drawSound = document.getElementById("draw-sound");
 const winSound = document.getElementById("win-sound");
+const lossSound = document.getElementById("loss-sound");
+const warSound = document.getElementById("war-sound");
 const endSound = document.getElementById("end-sound");
 
 // Sound settings
 let soundEnabled = true;
-drawSound.volume = 0.6;  // Moderate volume for frequent draw sounds
-winSound.volume = 0.8;   // Higher volume for exciting win moments
-endSound.volume = 0.9;   // Highest volume for game end celebration
+drawSound.volume = 0.6;   // Card draw sound
+winSound.volume = 0.8;    // Player wins - celebratory
+lossSound.volume = 0.6;   // Player loses - noticeable but not harsh
+warSound.volume = 0.7;    // War/Draw - dramatic
+endSound.volume = 0.9;    // Game end - celebratory
 
 
 function handleClick() {
@@ -149,14 +153,15 @@ drawCardBtn.addEventListener("click", () => {
             if (winnerText === "Computer wins!") {
                 roundResult = "Computer wins!";
                 winnerIdx = 0;
-                playSound(winSound);
+                playSound(lossSound); // Player loses - play loss sound
                 animateScore("+1 Computer");
             } else if (winnerText === "You win!" || winnerText === `${playerName} wins!`) {
                 roundResult = `${playerName} wins!`;
                 winnerIdx = 1;
-                playSound(winSound);
+                playSound(winSound); // Player wins - play win sound
                 animateScore(`+1 ${playerName}`);
             } else {
+                playSound(warSound); // War/Draw - play war sound
                 animateScore("War!");
             }
             highlightWinner(winnerIdx);
@@ -164,16 +169,21 @@ drawCardBtn.addEventListener("click", () => {
             updateHistory();
             if (data.remaining === 0) {
                 drawCardBtn.disabled = true;
-                playSound(endSound);
+                
                 let finalText = "It's a tie game!";
                 let score = myScore;
                 if (computerScore > myScore) {
                     finalText = "The computer won the game!";
                     score = computerScore;
+                    playSound(lossSound); // Player lost the overall game
                 } else if (myScore > computerScore) {
                     finalText = `${playerName} won the game!`;
                     score = myScore;
+                    playSound(endSound); // Player won the overall game - celebration!
+                } else {
+                    playSound(warSound); // Tie game - neutral sound
                 }
+                
                 header.textContent = finalText;
                 leaderboard.push({ name: playerName, score });
                 leaderboard.sort((a, b) => b.score - a.score);
