@@ -622,6 +622,28 @@ button:disabled::before {
     display: none;
 }
 
+/* Start Game Button */
+.start-button {
+    background: linear-gradient(145deg, #4ecdc4, #45b7b8);
+    color: white;
+    font-size: 1.3em;
+    padding: 15px 30px;
+    animation: start-button-pulse 2s infinite;
+}
+
+@keyframes start-button-pulse {
+    0%, 100% { 
+        box-shadow: 0 4px 15px rgba(78,205,196,0.4);
+    }
+    50% { 
+        box-shadow: 0 6px 25px rgba(78,205,196,0.6);
+    }
+}
+
+.start-button:hover {
+    background: linear-gradient(145deg, #45b7b8, #3dabac);
+}
+
 button#new-deck {
     align-self: flex-start;
     padding: 10px 20px;

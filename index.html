@@ -22,14 +22,21 @@
                     <label for="player-name">Your Name:</label>
                     <input type="text" id="player-name" maxlength="16" placeholder="Player" />
                 </div>
-                <h2 id="header">Game of War</h2>
-                <h3 id="computer-score">Computer score: 0</h3>
-                <h3 id="my-score">My score: 0</h3>
+                <h2 id="header">Welcome to War!</h2>
+                <div class="score-section">
+                    <div class="score-box computer-score">
+                        <h3 id="computer-score">Computer: 0</h3>
+                    </div>
+                    <div class="vs-indicator">VS</div>
+                    <div class="score-box player-score">
+                        <h3 id="my-score">Player: 0</h3>
+                    </div>
+                </div>
                 <div id="cards" aria-label="Cards area">
                     <div class="card-slot" aria-label="Computer card"></div>
                     <div class="card-slot" aria-label="Your card"></div>
                 </div>
-                <button id="draw-cards" class="draw" aria-label="Draw cards">Draw</button>
+                <button id="draw-cards" class="draw" aria-label="Draw cards" disabled>Draw Cards</button>
                 <div id="score-animation" aria-live="polite"></div>
                 <div id="history-box" aria-label="Game history">
                     <h4>Game History</h4>

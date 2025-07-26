@@ -4,6 +4,8 @@ let myScore = 0;
 let history = [];
 let leaderboard = [];
 let playerName = "Player";
+let gameStarted = false;
+
 const cardsContainer = document.getElementById("cards");
 const newDeckBtn = document.getElementById("new-deck");
 const drawCardBtn = document.getElementById("draw-cards");
@@ -34,6 +36,7 @@ endSound.volume = 0.9;    // Game end - celebratory
 
 
 function handleClick() {
+    playSound(drawSound);
     fetch("https://apis.scrimba.com/deckofcards/api/deck/new/shuffle/")
         .then(res => res.json())
         .then(data => {
@@ -42,19 +45,20 @@ function handleClick() {
             computerScore = 0;
             myScore = 0;
             history = [];
+            gameStarted = true;
             updateHistory();
             updateScores();
             drawCardBtn.disabled = false;
-            header.textContent = "Game of War";
-            cardsContainer.children[0].innerHTML = "";
-            cardsContainer.children[1].innerHTML = "";
+            header.textContent = gameStarted ? "New Game Started!" : "Game Started!";
+            cardsContainer.children[0].innerHTML = `<div style="text-align: center; color: #fff; margin-top: 70px;">Computer Card</div>`;
+            cardsContainer.children[1].innerHTML = `<div style="text-align: center; color: #fff; margin-top: 70px;">${playerName} Card</div>`;
             scoreAnimation.style.opacity = 0;
         });
 }
 
 function updateScores() {
-    computerScoreEl.textContent = `Computer score: ${computerScore}`;
-    myScoreEl.textContent = `${playerName} score: ${myScore}`;
+    computerScoreEl.textContent = `Computer: ${computerScore}`;
+    myScoreEl.textContent = `${playerName}: ${myScore}`;
 }
 
 function updateHistory() {
@@ -99,9 +103,11 @@ function playSound(sound) {
 function animateScore(text) {
     scoreAnimation.textContent = text;
     scoreAnimation.style.opacity = 1;
+    scoreAnimation.style.animation = 'score-popup 1.2s ease-out';
     setTimeout(() => {
         scoreAnimation.style.opacity = 0;
-    }, 800);
+        scoreAnimation.style.animation = '';
+    }, 1200);
 }
 
 function flipCards() {
@@ -110,7 +116,7 @@ function flipCards() {
     setTimeout(() => {
         cardsContainer.children[0].classList.remove("flipping");
         cardsContainer.children[1].classList.remove("flipping");
-    }, 600);
+    }, 800);
 }
 
 function highlightWinner(winnerIdx) {
@@ -125,12 +131,11 @@ function highlightWinner(winnerIdx) {
 }
 
 newDeckBtn.addEventListener("click", () => {
-    playSound(drawSound); // Play sound when getting new deck
     handleClick();
 });
 
 drawCardBtn.addEventListener("click", () => {
-    if (!deckId) return;
+    if (!deckId || !gameStarted) return;
     playSound(drawSound);
     fetch(`https://apis.scrimba.com/deckofcards/api/deck/${deckId}/draw/?count=2`)
         .then(res => res.json())
@@ -180,11 +185,11 @@ drawCardBtn.addEventListener("click", () => {
                         let finalText = "It's a tie game!";
                         let score = myScore;
                         if (computerScore > myScore) {
-                            finalText = "The computer won the game!";
+                            finalText = "Computer wins the game!";
                             score = computerScore;
                             playSound(lossSound); // Player lost the overall game
                         } else if (myScore > computerScore) {
-                            finalText = `${playerName} won the game!`;
+                            finalText = `${playerName} wins the game!`;
                             score = myScore;
                             playSound(endSound); // Player won the overall game - celebration!
                         } else {
@@ -194,6 +199,9 @@ drawCardBtn.addEventListener("click", () => {
                         leaderboard.push({ name: playerName, score });
                         leaderboard.sort((a, b) => b.score - a.score);
                         updateLeaderboard();
+                        
+                        // Reset game state when game ends
+                        gameStarted = false;
                     }
                 }
             }
@@ -205,7 +213,18 @@ drawCardBtn.addEventListener("click", () => {
 });
 
 restartBtn.addEventListener("click", () => {
-    handleClick();
+    gameStarted = false;
+    drawCardBtn.disabled = true;
+    header.textContent = "Welcome to War!";
+    cardsContainer.children[0].innerHTML = `<div style="text-align: center; color: #fff; margin-top: 70px;">Ready to play?</div>`;
+    cardsContainer.children[1].innerHTML = `<div style="text-align: center; color: #fff; margin-top: 70px;">Click Start Game!</div>`;
+    remainingText.textContent = "";
+    computerScore = 0;
+    myScore = 0;
+    history = [];
+    updateHistory();
+    updateScores();
+    scoreAnimation.style.opacity = 0;
 });
 
 // Mute/Unmute toggle
