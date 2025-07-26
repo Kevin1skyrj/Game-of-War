@@ -136,59 +136,71 @@ drawCardBtn.addEventListener("click", () => {
         .then(res => res.json())
         .then(data => {
             remainingText.textContent = `Remaining cards: ${data.remaining}`;
-            flipCards();
-            cardsContainer.children[0].innerHTML = `
-                <img src="${data.cards[0].image}" class="card" />
-                <div class="card-label">Computer</div>
-            `;
-            cardsContainer.children[1].innerHTML = `
-                <img src="${data.cards[1].image}" class="card" />
-                <div class="card-label">${playerName}</div>
-            `;
-            const winnerText = determineCardWinner(data.cards[0], data.cards[1]);
-            header.textContent = winnerText;
-            updateScores();
-            let roundResult = "War!";
-            let winnerIdx = null;
-            if (winnerText === "Computer wins!") {
-                roundResult = "Computer wins!";
-                winnerIdx = 0;
-                playSound(lossSound); // Player loses - play loss sound
-                animateScore("+1 Computer");
-            } else if (winnerText === "You win!" || winnerText === `${playerName} wins!`) {
-                roundResult = `${playerName} wins!`;
-                winnerIdx = 1;
-                playSound(winSound); // Player wins - play win sound
-                animateScore(`+1 ${playerName}`);
-            } else {
-                playSound(warSound); // War/Draw - play war sound
-                animateScore("War!");
-            }
-            highlightWinner(winnerIdx);
-            history.push(roundResult);
-            updateHistory();
-            if (data.remaining === 0) {
-                drawCardBtn.disabled = true;
-                
-                let finalText = "It's a tie game!";
-                let score = myScore;
-                if (computerScore > myScore) {
-                    finalText = "The computer won the game!";
-                    score = computerScore;
-                    playSound(lossSound); // Player lost the overall game
-                } else if (myScore > computerScore) {
-                    finalText = `${playerName} won the game!`;
-                    score = myScore;
-                    playSound(endSound); // Player won the overall game - celebration!
-                } else {
-                    playSound(warSound); // Tie game - neutral sound
+            // Preload both card images before flipping
+            const img1 = new Image();
+            const img2 = new Image();
+            let loaded = 0;
+            function onLoad() {
+                loaded++;
+                if (loaded === 2) {
+                    // Both images loaded, now update DOM and animate
+                    flipCards();
+                    cardsContainer.children[0].innerHTML = `
+                        <img src="${data.cards[0].image}" class="card" />
+                        <div class="card-label">Computer</div>
+                    `;
+                    cardsContainer.children[1].innerHTML = `
+                        <img src="${data.cards[1].image}" class="card" />
+                        <div class="card-label">${playerName}</div>
+                    `;
+                    const winnerText = determineCardWinner(data.cards[0], data.cards[1]);
+                    header.textContent = winnerText;
+                    updateScores();
+                    let roundResult = "War!";
+                    let winnerIdx = null;
+                    if (winnerText === "Computer wins!") {
+                        roundResult = "Computer wins!";
+                        winnerIdx = 0;
+                        playSound(lossSound); // Player loses - play loss sound
+                        animateScore("+1 Computer");
+                    } else if (winnerText === "You win!" || winnerText === `${playerName} wins!`) {
+                        roundResult = `${playerName} wins!`;
+                        winnerIdx = 1;
+                        playSound(winSound); // Player wins - play win sound
+                        animateScore(`+1 ${playerName}`);
+                    } else {
+                        playSound(warSound); // War/Draw - play war sound
+                        animateScore("War!");
+                    }
+                    highlightWinner(winnerIdx);
+                    history.push(roundResult);
+                    updateHistory();
+                    if (data.remaining === 0) {
+                        drawCardBtn.disabled = true;
+                        let finalText = "It's a tie game!";
+                        let score = myScore;
+                        if (computerScore > myScore) {
+                            finalText = "The computer won the game!";
+                            score = computerScore;
+                            playSound(lossSound); // Player lost the overall game
+                        } else if (myScore > computerScore) {
+                            finalText = `${playerName} won the game!`;
+                            score = myScore;
+                            playSound(endSound); // Player won the overall game - celebration!
+                        } else {
+                            playSound(warSound); // Tie game - neutral sound
+                        }
+                        header.textContent = finalText;
+                        leaderboard.push({ name: playerName, score });
+                        leaderboard.sort((a, b) => b.score - a.score);
+                        updateLeaderboard();
+                    }
                 }
-                
-                header.textContent = finalText;
-                leaderboard.push({ name: playerName, score });
-                leaderboard.sort((a, b) => b.score - a.score);
-                updateLeaderboard();
             }
+            img1.onload = onLoad;
+            img2.onload = onLoad;
+            img1.src = data.cards[0].image;
+            img2.src = data.cards[1].image;
         });
 });
 
