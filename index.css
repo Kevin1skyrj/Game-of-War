@@ -266,7 +266,7 @@
 html, body {
     margin: 0;
     padding: 0;
-    background-image: url("img/table.png");
+    /* background-image: url("img/table.png"); */
     font-family: "Exo 2", 'Segoe UI', Arial, sans-serif;
     height: 100vh;
     box-sizing: border-box;

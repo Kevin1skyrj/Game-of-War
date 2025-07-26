@@ -168,9 +168,10 @@ themeSwitcher.addEventListener("change", (e) => {
     if (theme === "green") {
         bg = "linear-gradient(135deg, #2e8b57 0%, #006400 100%), url('img/table.png')";
     } else if (theme === "blue") {
-        bg = "linear-gradient(135deg, #1e90ff 0%, #4682b4 100%)";
+        bg = "linear-gradient(135deg, #1e90ff 0%, #4682b4 100%), url('img/blue-table.jpg')";
+        
     } else if (theme === "wood") {
-        bg = "url('img/wood.jpg')";
+        bg = "url('img/wood-table.jpg')";
     }
     document.body.style.background = bg;
     document.body.style.backgroundBlendMode = theme === "wood" ? "normal" : "multiply";
