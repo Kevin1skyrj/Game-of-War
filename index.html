@@ -5,18 +5,82 @@
         <link rel="stylesheet" href="index.css">
     </head>
     <body>
-        <div class="top">
-            <button id="new-deck">New Deck</button>
-            <p id="remaining"></p>
+        <div class="main-layout">
+            <div class="center-content" aria-label="Game area">
+                <div class="top">
+                    <button id="new-deck">New Deck</button>
+                    <button id="restart-btn">Restart</button>
+                    <select id="theme-switcher" aria-label="Theme switcher">
+                        <option value="green">Green Table</option>
+                        <option value="blue">Blue Table</option>
+                        <option value="wood">Wood Table</option>
+                    </select>
+                    <p id="remaining"></p>
+                </div>
+                <div class="player-inputs">
+                    <label for="player-name">Your Name:</label>
+                    <input type="text" id="player-name" maxlength="16" placeholder="Player" />
+                </div>
+                <h2 id="header">Game of War</h2>
+                <h3 id="computer-score">Computer score: 0</h3>
+                <h3 id="my-score">My score: 0</h3>
+                <div id="cards" aria-label="Cards area">
+                    <div class="card-slot" aria-label="Computer card"></div>
+                    <div class="card-slot" aria-label="Your card"></div>
+                </div>
+                <button id="draw-cards" class="draw" aria-label="Draw cards">Draw</button>
+                <div id="score-animation" aria-live="polite"></div>
+                <div id="history-box" aria-label="Game history">
+                    <h4>Game History</h4>
+                    <ul id="history-list"></ul>
+                </div>
+                <div id="leaderboard-box" aria-label="Leaderboard">
+                    <h4>Leaderboard</h4>
+                    <ul id="leaderboard-list"></ul>
+                </div>
+                <div id="hints-box" aria-label="Hints and Tips">
+                    <h4>Hints & Tips</h4>
+                    <ul>
+                        <li>Ace is always the highest card.</li>
+                        <li>Click Draw to play each round.</li>
+                        <li>Check the card value reference below for rankings.</li>
+                    </ul>
+                </div>
+                <audio id="draw-sound" src="sounds/draw.mp3"></audio>
+                <audio id="win-sound" src="sounds/win.mp3"></audio>
+                <audio id="end-sound" src="sounds/end.mp3"></audio>
+            </div>
+            <div id="rules-box">
+                <h3>How to Play</h3>
+                <ul>
+                    <li>Click <b>New Deck</b> to start a new game.</li>
+                    <li>Click <b>Draw</b> to draw two cards: one for Computer, one for You.</li>
+                    <li>The higher card wins the round and earns a point.</li>
+                    <li>If both cards are equal, it's a "War!" and no points are awarded.</li>
+                    <li>When all cards are drawn, the player with the most points wins the game.</li>
+                </ul>
+                <p><b>Winner/Loser:</b> At every draw, the winner is the player with the higher card. At the end, the player with the highest score is the overall winner.</p>
+            </div>
         </div>
-        <h2 id="header">Game of War</h2>
-        <h3 id="computer-score">Computer score: 0</h3>
-        <div id="cards">
-            <div class="card-slot"></div>
-            <div class="card-slot"></div>
+        <div id="card-values-box">
+            <h3>Card Value Reference</h3>
+            <div class="card-values-table">
+                <span> <b>2</b> (Lowest)</span>
+                <span> <b>3</b></span>
+                <span> <b>4</b></span>
+                <span> <b>5</b></span>
+                <span> <b>6</b></span>
+                <span> <b>7</b></span>
+                <span> <b>8</b></span>
+                <span> <b>9</b></span>
+                <span> <b>10</b></span>
+                <span> <b>J</b></span>
+                <span> <b>Q</b></span>
+                <span> <b>K</b></span>
+                <span> <b>A</b> (Highest)</span>
+            </div>
+            <p class="card-values-desc">From left to right: 2 is the lowest, Ace is the highest.</p>
         </div>
-        <h3 id="my-score">My score: 0</h3>
-        <button id="draw-cards" class="draw">Draw</button>
         <script src="index.js"></script>
     </body>
 </html>
