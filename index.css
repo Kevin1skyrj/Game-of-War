@@ -107,8 +107,8 @@
     outline: none;
 }
 
-/* Restart button */
-#restart-btn {
+/* Restart and Mute buttons */
+#restart-btn, #mute-btn {
     background: #fff100;
     color: #222;
     border-radius: 8px;
@@ -117,6 +117,26 @@
     padding: 8px 18px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     transition: background 0.2s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+#mute-btn {
+    font-size: 1.1em;
+    padding: 8px 14px;
+    font-weight: 700;
+    color: #000; /* Black icon */
+    background: #fff100;
+}
+
+#mute-btn:hover {
+    background: #ffee00;
+    transform: translateY(-1px);
+}
+
+#restart-btn:hover {
+    background: #ffee00;
+    transform: translateY(-1px);
 }
 
 /* Theme switcher */
@@ -296,6 +316,15 @@ button {
     padding: 10px 24px;
 }
 
+button:hover {
+    background: #ffee00;
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
 button#new-deck {
     align-self: flex-start;
     padding: 8px 18px;
@@ -353,6 +382,7 @@ div.top {
     align-self: flex-start;
     margin-top: 32px;
     margin-bottom: 12px;
+    margin-left: -40px; /* Shift buttons to the left */
 }
 
 div.top > p {

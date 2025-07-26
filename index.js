@@ -14,12 +14,19 @@ const myScoreEl = document.getElementById("my-score");
 const historyList = document.getElementById("history-list");
 const leaderboardList = document.getElementById("leaderboard-list");
 const restartBtn = document.getElementById("restart-btn");
+const muteBtn = document.getElementById("mute-btn");
 const themeSwitcher = document.getElementById("theme-switcher");
 const playerNameInput = document.getElementById("player-name");
 const scoreAnimation = document.getElementById("score-animation");
 const drawSound = document.getElementById("draw-sound");
 const winSound = document.getElementById("win-sound");
 const endSound = document.getElementById("end-sound");
+
+// Sound settings
+let soundEnabled = true;
+drawSound.volume = 0.6;  // Moderate volume for frequent draw sounds
+winSound.volume = 0.8;   // Higher volume for exciting win moments
+endSound.volume = 0.9;   // Highest volume for game end celebration
 
 
 function handleClick() {
@@ -65,9 +72,23 @@ function updateLeaderboard() {
 }
 
 function playSound(sound) {
-    if (sound) {
-        sound.currentTime = 0;
-        sound.play();
+    if (sound && sound.readyState >= 2 && soundEnabled) { // Check if audio is loaded and sound is enabled
+        try {
+            sound.currentTime = 0; // Reset to beginning
+            const playPromise = sound.play();
+            
+            // Handle browsers that return a promise
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Audio playback failed:", error);
+                });
+            }
+        } catch (error) {
+            console.log("Audio play error:", error);
+        }
+    } else if (sound && soundEnabled) {
+        // If audio isn't ready, wait a bit and try again
+        setTimeout(() => playSound(sound), 100);
     }
 }
 
@@ -99,7 +120,10 @@ function highlightWinner(winnerIdx) {
     }
 }
 
-newDeckBtn.addEventListener("click", handleClick);
+newDeckBtn.addEventListener("click", () => {
+    playSound(drawSound); // Play sound when getting new deck
+    handleClick();
+});
 
 drawCardBtn.addEventListener("click", () => {
     if (!deckId) return;
@@ -160,6 +184,14 @@ drawCardBtn.addEventListener("click", () => {
 
 restartBtn.addEventListener("click", () => {
     handleClick();
+});
+
+// Mute/Unmute toggle
+muteBtn.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    muteBtn.textContent = soundEnabled ? "♪" : "♫";
+    muteBtn.title = soundEnabled ? "Mute Sound" : "Unmute Sound";
+    muteBtn.style.opacity = soundEnabled ? "1" : "0.6";
 });
 
 themeSwitcher.addEventListener("change", (e) => {

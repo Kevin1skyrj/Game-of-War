@@ -10,6 +10,7 @@
                 <div class="top">
                     <button id="new-deck">New Deck</button>
                     <button id="restart-btn">Restart</button>
+                    <button id="mute-btn" title="Toggle Sound">♪</button>
                     <select id="theme-switcher" aria-label="Theme switcher">
                         <option value="green">Green Table</option>
                         <option value="blue">Blue Table</option>
@@ -46,9 +47,18 @@
                         <li>Check the card value reference below for rankings.</li>
                     </ul>
                 </div>
-                <audio id="draw-sound" src="sounds/draw.mp3"></audio>
-                <audio id="win-sound" src="sounds/win.mp3"></audio>
-                <audio id="end-sound" src="sounds/end.mp3"></audio>
+                <audio id="draw-sound" preload="auto">
+                    <source src="sounds/draw.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <audio id="win-sound" preload="auto">
+                    <source src="sounds/win.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
+                <audio id="end-sound" preload="auto">
+                    <source src="sounds/end.wav" type="audio/wav">
+                    Your browser does not support the audio element.
+                </audio>
             </div>
             <div id="rules-box">
                 <h3>How to Play</h3>
